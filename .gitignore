@@ -55,3 +55,11 @@ Icon?
 # Debug files
 debug/
 *.stackdump
+
+# VitePress docs build output
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+docs/node_modules/
+
+# Go build artifacts
+cloud-functions/go.sum

@@ -1,12 +1,23 @@
+# ── Cloudflare Workers Config ──────────────────────────────────────────
+# EasyTier WebSocket Relay - Cloudflare Worker 部署配置
+#
+# 部署方式：
+#   1. 一键部署: 点击 README 中的 "Deploy to Cloudflare Workers" 按钮
+#   2. 手动部署: npx wrangler deploy
+#   3. 本地开发: pnpm dev
+#
+# EdgeOne Pages 部署请使用 cloud-functions/ 目录下的 Go 版本
+# 详见 docs/deploy/edgeone.md
+
 name = "easytier-ws-relay-worker"
 main = "src/worker.js"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-WS_PATH = "ws"
-EASYTIER_DISABLE_RELAY = "0"
-EASYTIER_COMPRESS_RPC = "1"
+WS_PATH = "ws"                    # WebSocket 路径
+EASYTIER_DISABLE_RELAY = "0"     # 是否禁用中继模式 (0=启用, 1=禁用)
+EASYTIER_COMPRESS_RPC = "1"      # 是否压缩 RPC 消息 (0=不压缩, 1=压缩)
 
 [durable_objects]
 bindings = [
