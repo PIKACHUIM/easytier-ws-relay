@@ -1,9 +1,5 @@
 # 🌐 EasyTier WebSocket Relay
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/EasyTier/easytier-ws-relay)
-
-[![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?template=easytier-ws-relay)
-
 基于 Cloudflare Workers 和 EdgeOne Pages 的 **无服务器 WebSocket 中继服务**，为 [EasyTier](https://github.com/EasyTier/EasyTier) 去中心化 P2P 网络提供高性能的信令转发与路由同步。
 
 ---
@@ -82,11 +78,9 @@ easytier-core --relay "wss://easytier-ws-relay.example.workers.dev/ws?room=my-ne
 
 ## 📦 自部署
 
-### 一键部署到 Cloudflare Workers
-
-点击下方按钮，一键部署到你自己的 Cloudflare 账号：
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/EasyTier/easytier-ws-relay)
+| [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/EasyTier/easytier-ws-relay) | [![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?template=easytier-ws-relay) |
+|:--:|:--:|
+| **Cloudflare Workers** | **EdgeOne Pages** |
 
 ### 手动部署
 
