@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: 'EasyTier WS Relay',
   description: '基于 Cloudflare Workers 的 EasyTier WebSocket 中继服务文档',
   lang: 'zh-CN',
@@ -85,4 +86,5 @@ export default defineConfig({
     },
     lineNumbers: true
   }
-})
+}))
+

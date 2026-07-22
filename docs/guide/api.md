@@ -79,32 +79,44 @@ GET /ws
 
 ## 示例：EasyTier 客户端配置
 
-### 命令行
+### 命令行（去中心化组网）
 
 ```bash
-easytier-core \
-  --relay "wss://your-relay.workers.dev/ws?room=my-network" \
+# DHCP 模式（自动分配 IP）
+easytier-core -d -p ws://your-relay.workers.dev/ws?room=my-network
+
+# 固定 IP 模式
+easytier-core --ipv4 10.0.0.1 -p ws://your-relay.workers.dev/ws?room=my-network
+
+# 指定网络名和密钥
+easytier-core -d \
+  -p ws://your-relay.workers.dev/ws?room=my-network \
   --network-name my-network \
   --network-secret my-secret-key
+```
+
+### 多对端 (主备中继)
+
+```bash
+easytier-core -d \
+  -p ws://relay1.workers.dev/ws?room=my-network \
+  -p ws://relay2.workers.dev/ws?room=my-network
 ```
 
 ### 配置文件 (config.toml)
 
 ```toml
-[relay]
-url = "wss://your-relay.workers.dev/ws?room=my-network"
+instance_name = "default"
+dhcp = true
 
-[network]
-name = "my-network"
-secret = "my-secret-key"
-```
+# 对端列表
+[[peers]]
+uri = "ws://relay1.workers.dev/ws?room=my-network"
 
-### 多中继 (主备)
+[[peers]]
+uri = "ws://relay2.workers.dev/ws?room=my-network"
 
-```toml
-[[relay]]
-url = "wss://relay1.workers.dev/ws?room=my-network"
-
-[[relay]]
-url = "wss://relay2.workers.dev/ws?room=my-network"
+[network_identity]
+network_name = "my-network"
+network_secret = "my-secret-key"
 ```

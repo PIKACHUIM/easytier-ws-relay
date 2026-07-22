@@ -458,12 +458,11 @@ body::after{
     <!-- Tab: Quickstart -->
     <div id="panel-quickstart" class="tab-panel active">
       <div class="guide-section">
-        <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="qs.title">使用公共中继</span></h3>
-        <p data-i18n="qs.desc">在 EasyTier 配置文件中添加以下配置，即可使用公共中继服务：</p>
-        <pre><code><span class="cmd-comment"># ~/.easytier/config.toml</span>
-[relay]
-url = <span class="accent-code">"${wsUrl}?room=&lt;your_network_name&gt;"</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
-        <div class="note" data-i18n="qs.note">每个不同网络名称 (network_name) 的节点会被隔离在不同的虚拟房间中。请为你和你的同伴使用相同的 network_name。</div>
+        <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="qs.title">去中心化组网</span></h3>
+        <p data-i18n="qs.desc">所有节点通过 <code>-d</code> + <code>-p</code> 参数指定同一个中继地址即可互相发现：</p>
+        <pre><code><span class="cmd-comment"># DHCP 自动分配虚拟 IP</span>
+easytier-core -d -p <span class="accent-code">ws://${url.host}${wsPath}?room=&lt;your_room&gt;</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
+        <div class="note" data-i18n="qs.note">每个不同房间名称 (room) 的节点会被隔离在不同的虚拟房间中。请为你和你的同伴使用相同的 room 名称。</div>
       </div>
     </div>
 
@@ -471,20 +470,19 @@ url = <span class="accent-code">"${wsUrl}?room=&lt;your_network_name&gt;"</span>
     <div id="panel-usage" class="tab-panel">
       <div class="guide-section">
         <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="usage.title">EasyTier 客户端配置</span></h3>
-        <p data-i18n="usage.desc">在 EasyTier 客户端中通过命令行或配置文件指定中继地址：</p>
-        <pre><code><span class="cmd-comment"># 命令行方式</span>
-easytier-core --relay <span class="accent-code">"${wsUrl}?room=my-network"</span>
+        <p data-i18n="usage.desc">所有节点通过 <code>-d</code> + <code>-p</code> 参数去中心化组网：</p>
+        <pre><code><span class="cmd-comment"># DHCP 模式（自动分配虚拟 IP）</span>
+easytier-core -d -p <span class="accent-code">ws://${url.host}${wsPath}?room=my-network</span>
 
-<span class="cmd-comment"># 配置文件方式 (config.toml)</span>
-[relay]
-url = <span class="accent-code">"${wsUrl}?room=my-network"</span>
+<span class="cmd-comment"># 固定 IP 模式</span>
+easytier-core --ipv4 10.0.0.1 -p <span class="accent-code">ws://${url.host}${wsPath}?room=my-network</span>
 
-<span class="cmd-comment"># 多中继 (主备)</span>
-[[relay]]
-url = <span class="accent-code">"${wsUrl}?room=my-network"</span>
+<span class="cmd-comment"># 多中继 (主备)  / 配置文件方式 (config.toml)</span>
+[[peers]]
+uri = <span class="accent-code">"ws://${url.host}${wsPath}?room=my-network"</span>
 
-[[relay]]
-url = <span class="accent-code">"wss://your-own-relay.example.com/ws?room=my-network"</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
+[[peers]]
+uri = <span class="accent-code">"wss://your-own-relay.example.com/ws?room=my-network"</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
       </div>
       <div class="guide-section">
         <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="usage.params">URL 参数说明</span></h3>
@@ -594,9 +592,9 @@ wrangler deploy</code></pre>
       'btn.github':'GitHub','btn.easytier':'EasyTier 项目','btn.guide':'使用指南','btn.copy':'复制','btn.copied':'已复制',
       'endpoint.label':'WebSocket 中继地址',
       'tab.quickstart':'快速开始','tab.usage':'使用配置','tab.deploy':'自部署','tab.arch':'架构原理',
-      'qs.title':'使用公共中继','qs.desc':'在 EasyTier 配置文件中添加以下配置，即可使用公共中继服务：',
-      'qs.note':'每个不同网络名称 (network_name) 的节点会被隔离在不同的虚拟房间中。请为你和你的同伴使用相同的 network_name。',
-      'usage.title':'EasyTier 客户端配置','usage.desc':'在 EasyTier 客户端中通过命令行或配置文件指定中继地址：',
+      'qs.title':'去中心化组网','qs.desc':'所有节点通过 <code>-d</code> + <code>-p</code> 参数指定同一个中继地址即可互相发现：',
+      'qs.note':'每个不同房间名称 (room) 的节点会被隔离在不同的虚拟房间中。请为你和你的同伴使用相同的 room 名称。',
+      'usage.title':'EasyTier 客户端配置','usage.desc':'所有节点通过 <code>-d</code> + <code>-p</code> 参数去中心化组网：',
       'usage.params':'URL 参数说明',
       'deploy.title':'自部署指南','deploy.desc':'你可以将中继服务部署到自己的 Cloudflare 账号下，获得更好的性能和隐私：',
       'deploy.step1.title':'安装 Wrangler CLI','deploy.step1.desc':'使用 npm 全局安装 Cloudflare Wrangler 命令行工具：',
@@ -617,9 +615,9 @@ wrangler deploy</code></pre>
       'btn.github':'GitHub','btn.easytier':'EasyTier Project','btn.guide':'User Guide','btn.copy':'Copy','btn.copied':'Copied',
       'endpoint.label':'WebSocket Relay Endpoint',
       'tab.quickstart':'Quick Start','tab.usage':'Configuration','tab.deploy':'Self Host','tab.arch':'Architecture',
-      'qs.title':'Using Public Relay','qs.desc':'Add the following configuration to your EasyTier config file to use the public relay:',
-      'qs.note':'Nodes with different network names are isolated in separate virtual rooms. Use the same network_name for you and your peers.',
-      'usage.title':'EasyTier Client Config','usage.desc':'Specify the relay address via CLI or config file in EasyTier:',
+      'qs.title':'Decentralized Networking','qs.desc':'All nodes use <code>-d</code> + <code>-p</code> to connect to the same relay and discover each other:',
+      'qs.note':'Nodes with different room names are isolated in separate virtual rooms. Use the same room name for you and your peers.',
+      'usage.title':'EasyTier Client Config','usage.desc':'All nodes use <code>-d</code> + <code>-p</code> for decentralized networking:',
       'usage.params':'URL Parameters',
       'deploy.title':'Self-Host Guide','deploy.desc':'Deploy the relay service to your own Cloudflare account for better performance and privacy:',
       'deploy.step1.title':'Install Wrangler CLI','deploy.step1.desc':'Install Cloudflare Wrangler CLI globally via npm:',

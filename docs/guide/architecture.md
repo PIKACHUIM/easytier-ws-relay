@@ -2,21 +2,23 @@
 
 ## 整体架构
 
-```
-┌──────────────┐     WebSocket      ┌──────────────────┐     WebSocket      ┌──────────────┐
-│  EasyTier A  │ ──────────────────▶│                  │◀────────────────── │  EasyTier B  │
-│  (NAT 后)    │                    │  Cloudflare      │                    │  (NAT 后)    │
-│  PeerID: 101 │                    │  Worker          │                    │  PeerID: 102 │
-└──────────────┘                    │                  │                    └──────────────┘
-                                    │  ┌────────────┐  │
-                                    │  │ Durable     │  │
-                                    │  │ Object      │  │
-                                    │  │ (RelayRoom) │  │
-                                    │  │             │  │
-                                    │  │ PeerManager │  │
-                                    │  │ RpcHandler  │  │
-                                    │  └────────────┘  │
-                                    └──────────────────┘
+```mermaid
+flowchart LR
+    subgraph Edge[Cloudflare 边缘]
+        CF[Worker]
+        DO[(Durable Object<br/>RelayRoom)]
+        CF --> DO
+        subgraph Modules[核心模块]
+            PM[PeerManager]
+            RH[RpcHandler]
+            BH[BasicHandlers]
+        end
+        DO --- Modules
+    end
+
+    A[EasyTier A<br/>PeerID: 101<br/>NAT 后] <==>|WebSocket| CF
+    B[EasyTier B<br/>PeerID: 102<br/>NAT 后] <==>|WebSocket| CF
+    A <-.->|P2P 直连| B
 ```
 
 ## 核心模块

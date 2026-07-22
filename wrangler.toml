@@ -9,14 +9,14 @@
 # EdgeOne Pages 部署请使用 cloud-functions/ 目录下的 Go 版本
 # 详见 docs/deploy/edgeone.md
 
-name = "easytier-ws-relay-worker"
+name = "easytier-node"
 main = "src/worker.js"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
 WS_PATH = "ws"                    # WebSocket 路径
-EASYTIER_DISABLE_RELAY = "0"     # 是否禁用中继模式 (0=启用, 1=禁用)
+EASYTIER_DISABLE_RELAY = "1"     # 是否禁用中继模式 (0=启用, 1=禁用)
 EASYTIER_COMPRESS_RPC = "1"      # 是否压缩 RPC 消息 (0=不压缩, 1=压缩)
 
 [durable_objects]

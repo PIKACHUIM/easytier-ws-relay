@@ -58,23 +58,24 @@ flowchart LR
 | Crypto | `src/worker/core/crypto.js` | SipHash/AES-GCM/SHA256 加密 |
 | Protocol | `protos/` | EasyTier 二进制协议定义 (Protobuf) |
 
-## 🚀 快速开始（使用公共中继）
+## 🚀 快速开始
 
-在 EasyTier 配置文件中添加：
-
-```toml
-# ~/.easytier/config.toml
-[relay]
-url = "wss://easytier-ws-relay.example.workers.dev/ws?room=my-network"
-```
-
-或通过命令行：
+EasyTier 采用去中心化组网方式，通过 `-d` + `-p` 参数连接中继：
 
 ```bash
-easytier-core --relay "wss://easytier-ws-relay.example.workers.dev/ws?room=my-network"
+# 节点 A（DHCP 自动分配虚拟 IP）
+easytier-core -d -p ws://your-relay.workers.dev/ws?room=my-network
+
+# 节点 B（加入同一网络）
+easytier-core -d -p ws://your-relay.workers.dev/ws?room=my-network
 ```
 
-> ⚠️ 请确保你和同伴使用相同的 `room` 名称。不同房间的节点互相隔离。
+| 参数 | 说明 |
+|------|------|
+| `-d` | DHCP 模式，自动分配虚拟 IP |
+| `-p` | 对端地址，支持 `ws://`、`wss://`、`tcp://`、`udp://` 等协议 |
+
+> ⚠️ 所有节点使用相同的 `room` 名称才能互相发现。更多用法参见 [EasyTier 官方文档](https://easytier.cn/guide/network/decentralized-networking.html)。
 
 ## 📦 自部署
 
