@@ -4,10 +4,10 @@ export default defineConfig({
   title: 'EasyTier WS Relay',
   description: '基于 Cloudflare Workers 的 EasyTier WebSocket 中继服务文档',
   lang: 'zh-CN',
-  base: '/easytier-ws-relay/',
-  
+  base: '/',
+
   head: [
-    ['link', { rel: 'icon', href: '/easytier-ws-relay/favicon.ico' }],
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
   ],
 
   themeConfig: {

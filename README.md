@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/EasyTier/easytier-ws-relay)
 
-[![Deploy to EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/assets/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?template=easytier-ws-relay)
+[![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?template=easytier-ws-relay)
 
 基于 Cloudflare Workers 和 EdgeOne Pages 的 **无服务器 WebSocket 中继服务**，为 [EasyTier](https://github.com/EasyTier/EasyTier) 去中心化 P2P 网络提供高性能的信令转发与路由同步。
 
@@ -22,17 +22,23 @@
 
 ### 架构图
 
-```
-┌──────────────┐                        ┌──────────────┐
-│  EasyTier A  │──WebSocket──────────▶  │              │
-│  (Peer)      │                        │   Cloudflare │
-└──────────────┘                        │   Worker     │
-                                        │   (Relay)    │
-┌──────────────┐                        │              │
-│  EasyTier B  │──WebSocket──────────▶  │ Durable      │
-│  (Peer)      │                        │ Object       │
-└──────────────┘                        │ (RelayRoom)  │
-                                        └──────────────┘
+```mermaid
+flowchart LR
+    subgraph Edge[边缘节点]
+        direction TB
+        CF[Cloudflare Worker]
+        DO[(Durable Object<br/>RelayRoom)]
+        CF --> DO
+    end
+
+    subgraph Peers[EasyTier 节点]
+        A[EasyTier A<br/>Peer ID: 101<br/>NAT 后]
+        B[EasyTier B<br/>Peer ID: 102<br/>NAT 后]
+    end
+
+    A <==>|"WebSocket<br/>握手 / 路由同步 / Ping"| CF
+    B <==>|"WebSocket<br/>握手 / 路由同步 / Ping"| CF
+    A <-.->|"P2P 直连<br/>(打洞成功后)"| B
 ```
 
 ### 工作流程
