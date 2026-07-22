@@ -8,7 +8,7 @@ export { RelayRoom };
 function serveLandingPage(request, env) {
   const url = new URL(request.url);
   const wsPath = '/' + (env.WS_PATH || 'ws');
-  const wsUrl = url.origin + wsPath;
+  const wsUrl = url.origin;
   const githubUrl = 'https://github.com/EasyTier/easytier-ws-relay';
   const easyTierUrl = 'https://github.com/EasyTier/EasyTier';
 
@@ -461,7 +461,7 @@ body::after{
         <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="qs.title">去中心化组网</span></h3>
         <p data-i18n="qs.desc">所有节点通过 <code>-d</code> + <code>-p</code> 参数指定同一个中继地址即可互相发现：</p>
         <pre><code><span class="cmd-comment"># DHCP 自动分配虚拟 IP</span>
-easytier-core -d -p <span class="accent-code">ws://${url.host}${wsPath}?room=&lt;your_room&gt;</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
+easytier-core -d -p <span class="accent-code">ws://${url.host}?room=&lt;your_room&gt;</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
         <div class="note" data-i18n="qs.note">每个不同房间名称 (room) 的节点会被隔离在不同的虚拟房间中。请为你和你的同伴使用相同的 room 名称。</div>
       </div>
     </div>
@@ -472,17 +472,17 @@ easytier-core -d -p <span class="accent-code">ws://${url.host}${wsPath}?room=&lt
         <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="usage.title">EasyTier 客户端配置</span></h3>
         <p data-i18n="usage.desc">所有节点通过 <code>-d</code> + <code>-p</code> 参数去中心化组网：</p>
         <pre><code><span class="cmd-comment"># DHCP 模式（自动分配虚拟 IP）</span>
-easytier-core -d -p <span class="accent-code">ws://${url.host}${wsPath}?room=my-network</span>
+easytier-core -d -p <span class="accent-code">ws://${url.host}?room=my-network</span>
 
 <span class="cmd-comment"># 固定 IP 模式</span>
-easytier-core --ipv4 10.0.0.1 -p <span class="accent-code">ws://${url.host}${wsPath}?room=my-network</span>
+easytier-core --ipv4 10.0.0.1 -p <span class="accent-code">ws://${url.host}?room=my-network</span>
 
 <span class="cmd-comment"># 多中继 (主备)  / 配置文件方式 (config.toml)</span>
 [[peers]]
-uri = <span class="accent-code">"ws://${url.host}${wsPath}?room=my-network"</span>
+uri = <span class="accent-code">"ws://${url.host}?room=my-network"</span>
 
 [[peers]]
-uri = <span class="accent-code">"wss://your-own-relay.example.com/ws?room=my-network"</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
+uri = <span class="accent-code">"wss://your-own-relay.example.com?room=my-network"</span></code><button class="copy-code" onclick="copyCode(this)">复制</button></pre>
       </div>
       <div class="guide-section">
         <h3><span class="icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="usage.params">URL 参数说明</span></h3>
@@ -728,16 +728,16 @@ export default {
       return new Response('ok', { status: 200 });
     }
 
-    const wsPath = '/' + (env.WS_PATH || 'ws');
-    if (pathname === wsPath || pathname === wsPath + '/') {
-      if (request.headers.get('Upgrade') !== 'websocket') {
-        // Return landing page when accessing WS path without WebSocket upgrade (browser visit)
-        return serveLandingPage(request, env);
-      }
-
+    // Any WebSocket upgrade request → route to Durable Object (supports both / and /ws)
+    if (request.headers.get('Upgrade') === 'websocket') {
       const roomId = searchParams.get('room') || 'default';
       const roomStub = env.RELAY_ROOM.get(env.RELAY_ROOM.idFromName(roomId));
       return roomStub.fetch(request);
+    }
+
+    const wsPath = '/' + (env.WS_PATH || 'ws');
+    if (pathname === wsPath || pathname === wsPath + '/') {
+      return serveLandingPage(request, env);
     }
 
     // Root path or other browser requests → show landing page

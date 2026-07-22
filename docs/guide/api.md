@@ -83,14 +83,14 @@ GET /ws
 
 ```bash
 # DHCP 模式（自动分配 IP）
-easytier-core -d -p ws://your-relay.workers.dev/ws?room=my-network
+easytier-core -d -p ws://your-relay.workers.dev?room=my-network
 
 # 固定 IP 模式
-easytier-core --ipv4 10.0.0.1 -p ws://your-relay.workers.dev/ws?room=my-network
+easytier-core --ipv4 10.0.0.1 -p ws://your-relay.workers.dev?room=my-network
 
 # 指定网络名和密钥
 easytier-core -d \
-  -p ws://your-relay.workers.dev/ws?room=my-network \
+  -p ws://your-relay.workers.dev?room=my-network \
   --network-name my-network \
   --network-secret my-secret-key
 ```
@@ -99,8 +99,8 @@ easytier-core -d \
 
 ```bash
 easytier-core -d \
-  -p ws://relay1.workers.dev/ws?room=my-network \
-  -p ws://relay2.workers.dev/ws?room=my-network
+  -p ws://relay1.workers.dev?room=my-network \
+  -p ws://relay2.workers.dev?room=my-network
 ```
 
 ### 配置文件 (config.toml)
@@ -111,10 +111,10 @@ dhcp = true
 
 # 对端列表
 [[peers]]
-uri = "ws://relay1.workers.dev/ws?room=my-network"
+uri = "ws://relay1.workers.dev?room=my-network"
 
 [[peers]]
-uri = "ws://relay2.workers.dev/ws?room=my-network"
+uri = "ws://relay2.workers.dev?room=my-network"
 
 [network_identity]
 network_name = "my-network"
